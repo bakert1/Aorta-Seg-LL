@@ -1,0 +1,72 @@
+# Set to an int to run seed_everything with this value before classes instantiation. Set to True to use a random seed. (type: Union[bool, int], default: True)
+seed_everything: true
+
+# Customize every aspect of training via flags
+trainer:
+  # Supports passing different accelerator types ("cpu", "gpu", "tpu", "ipu", "hpu", "mps", "auto")
+  accelerator: auto
+
+  # Double precision (64, '64' or '64-true'), full precision (32, '32' or '32-true'),
+  # 16bit mixed precision (16, '16', '16-mixed') or bfloat16 mixed precision ('bf16', 'bf16-mixed').
+  # Can be used on CPU, GPU, TPUs, HPUs or IPUs.
+  precision: 32-true
+
+  # Whether to enable to progress bar by default.
+  # Default: ``True``. (type: Optional[bool], default: null)
+  enable_progress_bar:
+
+  # Whether to enable model summarization by default.
+  # Default: ``True``. (type: Optional[bool], default: null)
+  enable_model_summary:
+
+model:
+  # Whether the network performs segmentation. This parameter is based on the current trained U-Net model. Only change when updating U-Net.
+  do_seg: true
+
+  # Whether the network performs landmark localization. This parameter is based on the current trained U-Net model. Only change when updating U-Net.
+  do_ll: true
+
+  # The kernel size of the trained U-Net. Only change when updating U-Net.
+  kernel_size:
+  - 3
+  - 3
+  - 3
+
+  # The size of the 3D sliding window used when segmenting a medical image. Can make smaller if memory is an issue, but this will hurt performance and is not recommended.
+  sw_roi_size:
+  - 96
+  - 96
+  - 160
+
+  # The number of sliding windows that are processed simultaneously. A higher value requires more memory, leads to faster runtime, but does not affect performance.
+  #   (type: int, default: 4)
+  sw_batch_size: 4
+
+  # Fraction of how much the sliding windows overlap. Larger values require more computation, but improve the results.
+  sw_overlap: 0.5
+
+  # String to append to img filename to create the segmentation filename. Ex: Image is named "my_image.nii.gz", the segmentation is named "my_image_<seg_postfix>.nii.gz".
+  # default is "UNet_VOI"
+  seg_postfix:
+
+  # String to append to img filename to create the landmarks filename. Ex: Image is named "my_image.nii.gz", the landmark coordinate file is named "my_image_<ll_postfix>.npy".
+  # default is "UNet_landmarks"
+  ll_postfix:
+
+data:
+  # root directory to prepend to any filepath in the data CSVs. (type: Optional[str], default: null)
+  data_root:
+
+  # dictionary containing up to four keys: ['train', 'val', 'test', 'pred']. Each key maps to a list of CSV
+  # filepaths. For example, data_csvs['train'] should be a list of CSV filepaths to use for training while
+  # data_csvs['val'] should be a list of CSV filepaths to use for validation. You can also pass a single CSV
+  # filepath instead of a list of CSV filepaths. Each CSV should have up to three columns: [img, seg, ll].
+  # img is always required and should point to the input medical scan NIFTI. seg should point to a
+  # segmentation label NIFTI; ll points to a heatmap label NIFTI. (type: Optional[Dict[str, Union[str, List[str], null]]], default: null)
+  data_csvs:
+
+  # Whether to run the post-processing pipeline on CPU instead of GPU. Setting to True lowers the GPU memory requirement, but makes the code slower.
+  low_memory_predict: false
+
+# Path to trained U-Net weights
+ckpt_path:

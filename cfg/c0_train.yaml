@@ -1,0 +1,84 @@
+# pytorch_lightning==2.0.7
+# Parameters under trainer are defined in PyTorch Lightning documentation.
+seed_everything: true
+trainer:
+  # precision and parallel training:
+  precision: 16-mixed
+  accelerator: auto
+  strategy: auto
+  devices: auto
+  num_nodes: 1
+  use_distributed_sampler: true
+  sync_batchnorm: false
+
+  # training settings:
+  max_epochs: 50
+  max_steps: -1
+  max_time: null
+  num_sanity_val_steps: null
+  accumulate_grad_batches: 2
+  gradient_clip_val: null
+  gradient_clip_algorithm: null
+  deterministic: null
+  inference_mode: true
+  reload_dataloaders_every_n_epochs: 0
+
+  # for debugging:
+  fast_dev_run: false
+  limit_train_batches: null
+  limit_val_batches: null
+  overfit_batches: 0.0
+
+  # logging:
+  logger: null
+  log_every_n_steps: null
+  val_check_interval: null
+  check_val_every_n_epoch: 1
+  default_root_dir: null
+
+  # profiler and progress bar
+  profiler: null
+  enable_progress_bar: true
+  enable_model_summary: null
+  benchmark: null
+
+# Parameters under model are defined in lightning_module.py
+# other parameters not explicitly listed here can also be found in lightning_module.py
+# I recommend that you increase sw_overlap to 0.5 when using UNet for prediction
+model:
+  do_seg: true
+  do_ll: true
+  kernel_size:
+  - 3
+  - 3
+  - 3
+  channel_size_scale: 1
+  drop_rate: 0.0
+  lr: 0.0006
+  sw_roi_size:
+  - 96
+  - 96
+  - 160
+  sw_batch_size: 4
+  sw_overlap: 0.25
+  sw_mode: gaussian
+
+# Parameters under data are defined in dataset.py
+# other parameters not explicitly listed here can also be found in dataset.py
+# please read dataset.py to understand how to specify data_csvs, and cache_dir
+data:
+  image_type: CT
+  data_root: null
+  cache_dir: null
+  data_csvs:
+    train: []
+    val: []
+  batch_size: 8
+  num_random_crops: 4
+  crop_size:
+  - 96
+  - 96
+  - 160
+  seg_pos_weight: 1.0
+  ll_pos_weight: 1.0
+  device: null

@@ -1,0 +1,28 @@
+# pytorch_lightning==2.0.6
+# Configuration for running predictions
+seed_everything: true
+trainer:
+  precision: 32-true
+  logger: false
+  profiler: null
+model:
+  do_seg: true
+  do_ll: true
+  sw_roi_size:
+  - 96
+  - 96
+  - 160
+  sw_batch_size: 1
+  sw_overlap: 0.5
+  sw_mode: gaussian
+  seg_postfix: UNet_VOI
+  ll_postfix: UNet_landmarks
+  pred_verbose: false
+data:
+  image_type: CTA
+  data_root: null
+  cache_dir: null
+  data_csvs:
+    pred: null
+  low_memory_predict: true
+ckpt_path: models\JMI_SBIR_weights_only.ckpt
